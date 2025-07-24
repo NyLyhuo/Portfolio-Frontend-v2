@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@theme {
+  --default-font-family: "Rubik", sans-serif;
+  --color-primary: #38bdf8;
+  --color-hover: #0ea5e9;
+  --color-active: #0284c7;
+  --color-secondary: #fbbf24;
+}
