@@ -1,10 +1,22 @@
 <script setup lang="ts">
 import { reactive } from "vue";
+import { useAuthStore } from "../../stores/auth";
 
 const formData = reactive({
   email: "",
   password: "",
 });
+
+const authStore = useAuthStore();
+
+async function handleLogin() {
+  try {
+    await authStore.login(formData.email, formData.password);
+    console.log("Login successful!");
+  } catch (error) {
+    console.error("Login failed:", error);
+  }
+}
 </script>
 
 <template>
@@ -16,7 +28,7 @@ const formData = reactive({
       <h2 class="text-2xl font-bold text-center mb-6 tracking-tight">
         Hello H5
       </h2>
-      <form action="" class="space-y-4">
+      <form @submit.prevent="handleLogin" class="space-y-4">
         <div class="space-y-1">
           <label for="email" class="block text-sm/6 font-medium text-gray-900"
             >Email</label
