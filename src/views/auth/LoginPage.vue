@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useAuthStore } from "../../stores/auth";
+import router from "../../router";
 
 const formData = reactive({
   email: "",
@@ -12,6 +13,7 @@ const authStore = useAuthStore();
 async function handleLogin() {
   try {
     await authStore.login(formData.email, formData.password);
+    router.push({ name: "Dashboard" });
     console.log("Login successful!");
   } catch (error) {
     console.error("Login failed:", error);
