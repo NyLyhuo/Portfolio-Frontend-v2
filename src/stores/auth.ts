@@ -7,8 +7,8 @@ export const useAuthStore = defineStore("auth", {
     user: null as null | any,
   }),
   getters: {
-  isAuthenticated: (state) => !!state.token,
-},
+    isAuthenticated: (state) => !!state.token,
+  },
   actions: {
     async login(email: string, password: string) {
       try {
@@ -23,10 +23,27 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async logout() {
+    async fetchUser() {
+      const response = await axios.get("/user");
+      this.user = response.data;
+    },
+
+    async init() {
+      if (this.token) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${this.token}`;
+        try {
+          await this.fetchUser();
+        } catch (error) {
+          this.logout();
+        }
+      }
+    },
+
+    logout() {
       this.token = "";
       this.user = null;
       localStorage.removeItem("token");
-    }
+      delete axios.defaults.headers.common["Authorization"];
+    },
   },
 });

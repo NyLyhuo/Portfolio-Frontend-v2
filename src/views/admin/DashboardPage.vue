@@ -1,5 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useAuthStore } from '../../stores/auth';
+
+
+const authStore = useAuthStore();
+</script>
 
 <template>
-    <h2>Hello, H5</h2>
+    <h2>Hello, {{ authStore.user.name }}</h2>
 </template>
