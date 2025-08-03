@@ -6,4 +6,8 @@
   --color-hover: #0ea5e9;
   --color-active: #0284c7;
   --color-secondary: #fbbf24;
+  --color-dark: rgba(229, 231, 235, 0.5);
+  --color-light: rgba(55, 65, 81, 0.5);
 }
+
+@custom-variant dark (&:where(.dark, .dark *));

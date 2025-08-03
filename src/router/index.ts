@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "../stores/auth";
+import { storeToRefs } from "pinia";
+
 
 const routes = [
   {
@@ -22,10 +24,14 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
-  const isLoggedIn = !!authStore.token;
+  const { token } = storeToRefs(authStore);
 
-  if (to.meta.requiresAuth && !isLoggedIn) {
+  if (to.meta.requiresAuth && !token.value) {
     return next({ name: "Login" });
+  }
+
+  if (to.name === "Login" && token.value) {
+    return next({ name: "Dashboard" });
   }
 
   next();

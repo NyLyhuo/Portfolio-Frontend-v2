@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { useAuthStore } from '../../stores/auth';
-
-
-const authStore = useAuthStore();
+import Header from "../../components/Header.vue";
+import Sidebar from "../../components/Sidebar.vue";
 </script>
 
 <template>
-    <h2>Hello, {{ authStore.user.name }}</h2>
+  <div>
+    <Header />
+    <Sidebar />
+  </div>
 </template>
