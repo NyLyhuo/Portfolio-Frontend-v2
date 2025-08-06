@@ -4,10 +4,13 @@ import Sidebar from "../../components/Sidebar.vue";
 </script>
 
 <template>
-  <div class="min-h-screen flex">
-    <div class="flex-1 p-4 space-y-6 overflow-y-auto">
+  <div class="flex min-h-screen">
+    <Sidebar />
+    <div class="flex-1 flex flex-col">
       <Header />
-      <Sidebar />
+      <main class="p-4 space-y-6 flex-1 overflow-y-auto">
+        <RouterView />
+      </main>
     </div>
   </div>
 </template>

@@ -4,22 +4,17 @@ import { useAuthStore } from "../stores/auth";
 import { Moon, Sun, LogOut, Menu } from "lucide-vue-next";
 
 const isDarkMode = ref(false);
+const authStore = useAuthStore();
+
 function toggleTheme() {
   isDarkMode.value = !isDarkMode.value;
   document.documentElement.classList.toggle("dark", isDarkMode.value);
   localStorage.setItem("darkMode", JSON.stringify(isDarkMode.value));
 }
 
-const authStore = useAuthStore();
-function toggleAside() {
-  const sidebar = document.querySelector("aside");
-  if (sidebar) {
-    sidebar.classList.toggle("w-64");
-  }
-}
 function logout() {
   authStore.logout();
-  window.location.href = "/login"; // Redirect to login page after logout
+  window.location.href = "/login";
 }
 onMounted(() => {
   const saveDarkMode = localStorage.getItem("darkMode");
@@ -33,7 +28,6 @@ onMounted(() => {
 <template>
   <header class="flex items-center justify-between p-4">
     <div class="flex items-center space-x-4">
-      <button @click="toggleAside"><Menu /></button>
       <img class="w-8 h-auto" src="../assets/logo.svg" alt="logo" />
       <RouterLink to="/dashboard" class="text-primary font-bold">{{
         authStore.user.name
