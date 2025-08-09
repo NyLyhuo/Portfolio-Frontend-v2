@@ -39,7 +39,7 @@ onMounted(() => {
         @click="toggleTheme"
         class="hover:text-primary dark:hover:text-white"
       >
-        <component :is="isDarkMode ? Moon : Sun" />
+        <component :is="isDarkMode ? Sun : Moon" />
       </button>
       <button @click="logout" class="hover:text-primary dark:hover:text-white">
         <LogOut />
