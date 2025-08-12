@@ -37,11 +37,14 @@ onMounted(() => {
     <div class="flex items-center space-x-4">
       <button
         @click="toggleTheme"
-        class="hover:text-primary dark:hover:text-white"
+        class="cursor-pointer hover:text-primary dark:hover:text-white"
       >
         <component :is="isDarkMode ? Sun : Moon" />
       </button>
-      <button @click="logout" class="hover:text-primary dark:hover:text-white">
+      <button
+        @click="logout"
+        class="hover:text-primary dark:hover:text-white cursor-pointer"
+      >
         <LogOut />
       </button>
     </div>
