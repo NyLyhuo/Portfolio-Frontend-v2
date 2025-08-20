@@ -1,7 +1,46 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { reactive } from 'vue';
+import { useProjectStore } from '../stores/project';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+const projectStore = useProjectStore();
+const toast = useToast();
+
+const formData = reactive({
+  title: '',
+  description: '',
+  tech_stack: [] as string[],
+  github_link: '',
+  live_link: '',
+  image: null as File | null,
+});
+
+function handleFileUpload(event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    formData.image = target.files[0];
+  }
+}
+
+async function handleSubmit() {
+  try {
+    await projectStore.createProject(formData);
+    toast.success('Project created successfully!', {
+      position: "top-right",
+      duration: 3000,
+    });
+  } catch (error) {
+    toast.error('Failed to create project. Please try again.', {
+      position: "top-right",
+      duration: 4000,
+    });
+  }
+}
+</script>
 
 <template>
-  <form class="space-y-6 max-w-lg mx-auto" action="">
+  <form class="space-y-6 max-w-lg mx-auto" @submit.prevent="handleSubmit">
     <div>
       <label
         for="title"
@@ -12,6 +51,7 @@
         type="text"
         name="title"
         id="title"
+        v-model="formData.title"
         required
         class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
       />
@@ -27,6 +67,7 @@
         type="text"
         name="description"
         id="description"
+        v-model="formData.description"
         required
         class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none resize-none"
       />
@@ -42,6 +83,7 @@
           <input
             type="checkbox"
             value="Vue.js"
+            v-model="formData.tech_stack"
             class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
           />
           Vue.js
@@ -52,6 +94,7 @@
           <input
             type="checkbox"
             value="TailwindCSS"
+            v-model="formData.tech_stack"
             class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
           />
           Tailwind CSS
@@ -62,6 +105,7 @@
           <input
             type="checkbox"
             value="Laravel"
+            v-model="formData.tech_stack"
             class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
           />
           Laravel
@@ -80,6 +124,7 @@
         id="github_link"
         name="github_link"
         placeholder="https://github.com/username/project"
+        v-model="formData.github_link"
         required
         class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
       />
@@ -96,6 +141,7 @@
         id="live_link"
         name="live_link"
         placeholder="https://example.com"
+        v-model="formData.live_link"
         required
         class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
       />
@@ -112,6 +158,7 @@
         id="image"
         name="image"
         accept="image/*"
+        @change="handleFileUpload"
         class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
       />
     </div>
