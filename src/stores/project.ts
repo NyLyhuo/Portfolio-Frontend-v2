@@ -1,3 +1,4 @@
+import { useToast } from "vue-toast-notification";
 import api from "../lib/axios";
 import { defineStore } from "pinia";
 
@@ -55,6 +56,26 @@ export const useProjectStore = defineStore("project", {
       } catch (er: any) {
         this.error = er.message;
         throw er;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async updateProject(id: number, projectData: FormData | Record<string, any>) {
+      this.loading = true;
+      this.error = null;
+      try {
+        const response = await api.put(`/projects/${id}?_method=PUT`, projectData);
+        const update = response.data;
+
+        const index = this.project.findIndex((p) => p.id === id);
+        if (index !== -1) {
+          this.project[index] = update;
+        }
+
+        useToast().success("Project updated successfully!");
+      } catch (er: any) {
+        useToast().error("Failed to update project: ");
       } finally {
         this.loading = false;
       }

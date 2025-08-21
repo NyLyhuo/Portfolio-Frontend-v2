@@ -4,7 +4,9 @@ import { useProjectStore } from "../../stores/project";
 import { onMounted, reactive, ref } from "vue";
 import CreateProject from "../../components/CreateProject.vue";
 
+const projectStore = useProjectStore();
 const showModal = ref(false);
+
 function openModal() {
   showModal.value = true;
 }
@@ -12,61 +14,80 @@ function openModal() {
 function closeModal() {
   showModal.value = false;
 }
-const projectStore = useProjectStore();
 
 onMounted(() => {
   projectStore.fetchProject();
 });
 </script>
-
 <template>
   <div class="min-h-screen flex flex-col items-center p-6">
-    <div class="mb-6 flex items-center justify-between w-full max-w-2xl">
-      <h2 class="text-2xl font-bold tracking-tight">Project</h2>
-      <button @click="openModal" class="cursor-pointer"><plus /></button>
+    <!-- Header -->
+    <div class="mb-6 flex items-center justify-between w-full max-w-5xl">
+      <h2 class="text-3xl font-bold tracking-tight">Projects</h2>
+      <button
+        @click="openModal"
+        class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition"
+      >
+        <plus class="w-5 h-5" />
+        Add Project
+      </button>
     </div>
 
-    <div class="w-full max-w-2xl space-y-4">
-      <p>Your project:</p>
-      <ul v-if="projectStore.project && projectStore.project.length">
-        <li v-for="project in projectStore.project" :key="project.id">
-          <div class="border rounded-lg overflow-hidden">
-            <img
-              class="w-full h-40 object-cover mb-3"
-              :src="project.image"
-              alt="img"
-            />
-            <h3 class="text-lg font-bold">{{ project.title }}</h3>
-            <p class="text-sm mb-2">{{ project.description }}</p>
-            <div class="flex items-center space-x-2 mb-2">
-              <span
-                v-for="tech in project.tech_stack"
-                :key="tech"
-                class="px-2 py-1 border rounded-md text-sm"
-                >{{ tech }}</span
-              >
-            </div>
-            <div class="flex items-center space-x-4 mb-2">
-              <a
-                class="text-blue-500 hover:underline"
-                href="{{project.github_link}}"
-                >Github</a
-              >
-              <a
-                class="text-blue-500 hover:underline"
-                href="{{ project.live_link }}"
-                >Demo</a
-              >
-            </div>
+    <!-- Project Grid -->
+    <div class="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        v-for="project in projectStore.project"
+        :key="project.id"
+        class="border rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition bg-white dark:bg-gray-800"
+      >
+        <img
+          class="w-full h-48 object-cover"
+          :src="project.image"
+          alt="Project Image"
+        />
+
+        <div class="p-4">
+          <h3 class="text-lg font-semibold mb-1">{{ project.title }}</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-3">
+            {{ project.description }}
+          </p>
+
+          <!-- Tech stack -->
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span
+              v-for="tech in project.tech_stack"
+              :key="tech"
+              class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 border rounded-md"
+              >{{ tech }}</span
+            >
           </div>
-          <div>
-            <button class="ml-2 text-blue-500 hover:underline">Edit</button>
-            <button class="ml-2 text-red-500 hover:underline">Delete</button>
+
+          <!-- Links -->
+          <div class="flex gap-3 mb-3">
+            <a
+              :href="project.github_link"
+              target="_blank"
+              class="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+              >GitHub</a
+            >
+            <a
+              :href="project.live_link"
+              target="_blank"
+              class="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+              >Live Demo</a
+            >
           </div>
-        </li>
-      </ul>
+
+          <!-- Actions -->
+          <div class="flex justify-end gap-2">
+            <button class="text-sm text-blue-500 hover:underline">Edit</button>
+            <button class="text-sm text-red-500 hover:underline">Delete</button>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <!-- Modal -->
     <div
       v-if="showModal"
       class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
@@ -82,7 +103,6 @@ onMounted(() => {
         </div>
         <CreateProject />
       </div>
-      
     </div>
   </div>
 </template>
