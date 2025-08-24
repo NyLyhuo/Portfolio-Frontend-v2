@@ -1,41 +1,60 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
-import { useProjectStore } from '../stores/project';
-import {useToast} from 'vue-toast-notification';
-import 'vue-toast-notification/dist/theme-sugar.css';
+import { reactive } from 'vue'
+import { useProjectStore } from '../stores/project'
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
 
-const projectStore = useProjectStore();
-const toast = useToast();
+const props = defineProps<{
+  mode: 'create' | 'edit'
+  project?: {
+    id?: number
+    title: string
+    description: string
+    tech_stack: string[]
+    github_link: string
+    live_link: string
+    image?: string
+  }
+}>()
+
+const emit = defineEmits(['close'])
+const projectStore = useProjectStore()
+const toast = useToast()
 
 const formData = reactive({
-  title: '',
-  description: '',
-  tech_stack: [] as string[],
-  github_link: '',
-  live_link: '',
-  image: null as File | null,
-});
+  title: props.project?.title || '',
+  description: props.project?.description || '',
+  tech_stack: props.project?.tech_stack || [],
+  github_link: props.project?.github_link || '',
+  live_link: props.project?.live_link || '',
+  image: props.project?.image || '',
+})
 
 function handleFileUpload(event: Event) {
-  const target = event.target as HTMLInputElement;
+  const target = event.target as HTMLInputElement
   if (target.files && target.files.length > 0) {
-    formData.image = target.files[0];
+    formData.image = target.files[0] as any
   }
 }
 
 async function handleSubmit() {
-  try {
-    await projectStore.createProject(formData);
-    toast.success('Project created successfully!', {
-      position: "top-right",
-      duration: 3000,
-    });
-  } catch (error) {
-    toast.error('Failed to create project. Please try again.', {
-      position: "top-right",
-      duration: 4000,
-    });
+  if (props.mode === 'create') {
+    try {
+      await projectStore.createProject(formData)
+      toast.success('Project created successfully!', {
+        position: 'top-right',
+        duration: 3000,
+      })
+    } catch (error) {
+      toast.error('Failed to create project. Please try again.', {
+        position: 'top-right',
+        duration: 4000,
+      })
+    }
+  } else {
+    await projectStore.updateProject(props.project!.id!, formData)
   }
+  emit('close')
 }
 </script>
 
@@ -165,6 +184,7 @@ async function handleSubmit() {
     <div class="flex justify-end gap-3">
       <button
         type="button"
+        @click="$emit('close')"
         class="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
       >
         Cancel
@@ -173,7 +193,7 @@ async function handleSubmit() {
         type="submit"
         class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
       >
-        Create Project
+        {{ props.mode === 'create' ? 'Create' : 'Update' }} Project
       </button>
     </div>
   </form>
