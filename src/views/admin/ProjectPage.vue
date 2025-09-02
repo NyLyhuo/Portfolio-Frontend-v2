@@ -46,7 +46,7 @@ onMounted(() => {
       class="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
     >
       <div
-        v-for="project in projectStore.project"
+        v-for="project in projectStore.projects"
         :key="project.id"
         class="border rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition bg-white dark:bg-gray-800"
       >
@@ -94,7 +94,12 @@ onMounted(() => {
             >
               Edit
             </button>
-            <button class="text-sm text-red-500 hover:underline">Delete</button>
+            <button
+              @click="projectStore.deleteProject(project.id)"
+              class="text-sm text-red-500 hover:underline"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>
@@ -117,7 +122,7 @@ onMounted(() => {
         </div>
         <ProjectForm
           :mode="modalMode"
-          :project="selectedProject"
+          :projects="selectedProject"
           @close="closeModal"
         />
       </div>
