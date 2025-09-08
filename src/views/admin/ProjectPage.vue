@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Plus, X, Github } from 'lucide-vue-next'
+import { Plus, X } from 'lucide-vue-next'
 import { useProjectStore } from '../../stores/project'
 import { onMounted, ref } from 'vue'
 import ProjectForm from '../../components/ProjectForm.vue'
@@ -35,7 +35,7 @@ onMounted(() => {
       <h2 class="text-3xl font-bold tracking-tight">Projects</h2>
       <button
         @click="openCreateModal"
-        class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition"
+        class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl shadow hover:bg-hover transition"
       >
         <plus class="w-5 h-5" />
         Add Project
@@ -81,7 +81,7 @@ onMounted(() => {
             <a
               :href="project.live_link"
               target="_blank"
-              class="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+              class="px-3 py-1 text-sm bg-primary text-white rounded-md hover:bg-hover transition"
               >Live Demo</a
             >
           </div>
@@ -90,7 +90,7 @@ onMounted(() => {
           <div class="flex justify-end gap-2">
             <button
               @click="openEditModal(project)"
-              class="text-sm text-blue-500 hover:underline"
+              class="text-sm text-primary hover:underline"
             >
               Edit
             </button>
@@ -122,7 +122,7 @@ onMounted(() => {
         </div>
         <ProjectForm
           :mode="modalMode"
-          :projects="selectedProject"
+          :project="selectedProject"
           @close="closeModal"
         />
       </div>

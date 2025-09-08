@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { useProjectStore } from '../stores/project'
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
@@ -20,20 +20,22 @@ const props = defineProps<{
 const emit = defineEmits(['close'])
 const projectStore = useProjectStore()
 const toast = useToast()
+const previewImage = ref('')
 
 const formData = reactive({
-  title: props.project?.title || '',
-  description: props.project?.description || '',
-  tech_stack: props.project?.tech_stack || [],
-  github_link: props.project?.github_link || '',
-  live_link: props.project?.live_link || '',
-  image: props.project?.image || '',
+  title: '',
+  description: '',
+  tech_stack: [] as string[],
+  github_link: '',
+  live_link: '',
+  image: null as File | null,
 })
 
 function handleFileUpload(event: Event) {
   const target = event.target as HTMLInputElement
   if (target.files && target.files.length > 0) {
-    formData.image = target.files[0] as any
+    formData.image = target.files[0]
+    previewImage.value = URL.createObjectURL(target.files[0])
   }
 }
 
@@ -56,6 +58,38 @@ async function handleSubmit() {
   }
   emit('close')
 }
+
+onMounted(() => {
+  if (props.mode === 'edit' && props.project) {
+    Object.assign(formData, {
+      title: props.project.title,
+      description: props.project.description,
+      tech_stack: [...props.project.tech_stack],
+      github_link: props.project.github_link,
+      live_link: props.project.live_link,
+      image: null,
+    })
+    previewImage.value = props.project.image || ''
+  }
+})
+
+watch(
+  () => props.project,
+  (newProject) => {
+    if (props.mode === 'edit' && newProject) {
+      Object.assign(formData, {
+        title: newProject.title,
+        description: newProject.description,
+        tech_stack: [...newProject.tech_stack],
+        github_link: newProject.github_link,
+        live_link: newProject.live_link,
+        image: null,
+      })
+      previewImage.value = newProject.image || ''
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

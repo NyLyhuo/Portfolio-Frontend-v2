@@ -61,24 +61,33 @@ export const useProjectStore = defineStore('project', {
       }
     },
 
-    async updateProject(
-      id: number,
-      projectData: FormData | Record<string, any>
-    ) {
+    async updateProject(id: number, formData: any) {
       this.loading = true
       this.error = null
       try {
-        const response = await api.put(
-          `/projects/${id}?_method=PUT`,
-          projectData
-        )
-        const update = response.data
+        const data = new FormData()
+        data.append('title', formData.title)
+        data.append('description', formData.description)
+        data.append('github_link', formData.github_link)
+        data.append('live_link', formData.live_link)
 
-        const index = this.projects.findIndex((p) => p.id === id)
-        if (index !== -1) {
-          this.projects[index] = update
+        if (formData.image && formData.image instanceof File) {
+          data.append('image', formData.image)
         }
 
+        if (Array.isArray(formData.tech_stack)) {
+          formData.tech_stack.forEach((tech: string, index: number) => {
+            data.append(`tech_stack[${index}]`, tech)
+          })
+        }
+        const response = await api.post(`/projects/${id}?_method=PUT`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        const updated = response.data
+        const index = this.projects.findIndex((p) => p.id === id)
+        if (index !== -1) {
+          this.projects[index] = updated
+        }
         useToast().success('Project updated successfully!')
       } catch (er: any) {
         useToast().error('Failed to update project: ')
