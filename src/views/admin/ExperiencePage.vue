@@ -2,6 +2,7 @@
 import { Plus } from 'lucide-vue-next'
 import { useExperienceStore } from '../../stores/experience'
 import { onMounted } from 'vue'
+import ExperienceForm from '../../components/ExperienceForm.vue'
 
 const experienceStore = useExperienceStore()
 
@@ -23,6 +24,7 @@ onMounted(() => {
     </div>
 
     <div class="w-full max-w-5xl">
+      <ExperienceForm />
       <table class="min-w-full border-collapse">
         <thead class="bg-gray-100 text-gray-600 text-sm">
           <tr>
