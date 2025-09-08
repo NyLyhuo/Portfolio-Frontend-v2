@@ -1,5 +1,13 @@
 <script setup lang="ts">
 import { Plus } from 'lucide-vue-next'
+import { useExperienceStore } from '../../stores/experience'
+import { onMounted } from 'vue'
+
+const experienceStore = useExperienceStore()
+
+onMounted(() => {
+  experienceStore.fetchExperience()
+})
 </script>
 
 <template>
@@ -27,12 +35,15 @@ import { Plus } from 'lucide-vue-next'
           </tr>
         </thead>
         <tbody class="divide-y text-sm">
-          <tr>
-            <td class="px-6 py-4">Fronted Developer</td>
-            <td class="px-6 py-4">Company X</td>
-            <td class="px-6 py-4">2023-01</td>
-            <td class="px-6 py-4">Present</td>
-            <td class="px-6 py-4">design</td>
+          <tr
+            v-for="experience in experienceStore.experiences"
+            :key="experience.id"
+          >
+            <td class="px-6 py-4">{{ experience.role }}</td>
+            <td class="px-6 py-4">{{ experience.company }}</td>
+            <td class="px-6 py-4">{{ experience.start_date }}</td>
+            <td class="px-6 py-4">{{ experience.end_date }}</td>
+            <td class="px-6 py-4">{{ experience.description }}</td>
             <td class="px-6 py-4 flex gap-2">
               <button
                 class="px-4 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
