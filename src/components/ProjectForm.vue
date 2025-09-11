@@ -14,7 +14,7 @@ const props = defineProps<{
     github_link: string
     live_link: string
     image?: string
-  }
+  } | null
 }>()
 
 const emit = defineEmits(['close'])
