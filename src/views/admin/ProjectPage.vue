@@ -4,6 +4,16 @@ import { useProjectStore } from '../../stores/project'
 import { onMounted, ref } from 'vue'
 import ProjectForm from '../../components/ProjectForm.vue'
 
+interface Project {
+  id: number
+  title: string
+  description: string
+  tech_stack: string[]
+  github_link: string
+  live_link: string
+  image?: string
+}
+
 const projectStore = useProjectStore()
 const showModal = ref(false)
 const modalMode = ref<'create' | 'edit'>('create')
