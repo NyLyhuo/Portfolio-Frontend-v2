@@ -7,7 +7,7 @@ import ProjectForm from '../../components/ProjectForm.vue'
 const projectStore = useProjectStore()
 const showModal = ref(false)
 const modalMode = ref<'create' | 'edit'>('create')
-const selectedProject = ref(null)
+const selectedProject = ref<Project | null>(null)
 
 function openCreateModal() {
   modalMode.value = 'create'

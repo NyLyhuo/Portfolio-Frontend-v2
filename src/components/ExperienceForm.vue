@@ -8,6 +8,8 @@ const formData = reactive({
   end_date: '',
   description: '',
 })
+
+function handleSubmit() {}
 </script>
 
 <template>

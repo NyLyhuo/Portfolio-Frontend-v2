@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { useAuthStore } from "../stores/auth";
-import { Moon, Sun, LogOut, Menu } from "lucide-vue-next";
+import { onMounted, ref } from 'vue'
+import { useAuthStore } from '../stores/auth'
+import { Moon, Sun, LogOut } from 'lucide-vue-next'
 
-const isDarkMode = ref(false);
-const authStore = useAuthStore();
+const isDarkMode = ref(false)
+const authStore = useAuthStore()
 
 function toggleTheme() {
-  isDarkMode.value = !isDarkMode.value;
-  document.documentElement.classList.toggle("dark", isDarkMode.value);
-  localStorage.setItem("darkMode", JSON.stringify(isDarkMode.value));
+  isDarkMode.value = !isDarkMode.value
+  document.documentElement.classList.toggle('dark', isDarkMode.value)
+  localStorage.setItem('darkMode', JSON.stringify(isDarkMode.value))
 }
 
 function logout() {
-  authStore.logout();
-  window.location.href = "/login";
+  authStore.logout()
+  window.location.href = '/login'
 }
 onMounted(() => {
-  const saveDarkMode = localStorage.getItem("darkMode");
+  const saveDarkMode = localStorage.getItem('darkMode')
   if (saveDarkMode) {
-    isDarkMode.value = JSON.parse(saveDarkMode);
-    document.documentElement.classList.toggle("dark", isDarkMode.value);
+    isDarkMode.value = JSON.parse(saveDarkMode)
+    document.documentElement.classList.toggle('dark', isDarkMode.value)
   }
-});
+})
 </script>
 
 <template>
