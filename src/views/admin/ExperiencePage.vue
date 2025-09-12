@@ -1,21 +1,29 @@
 <script setup lang="ts">
-import { Plus } from 'lucide-vue-next'
+import { Plus, X } from 'lucide-vue-next'
 import { useExperienceStore } from '../../stores/experience'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import ExperienceForm from '../../components/ExperienceForm.vue'
 
 const experienceStore = useExperienceStore()
+const showModal = ref(false)
 
+function openModal() {
+  showModal.value = true
+}
+function closeModal() {
+  showModal.value = false
+}
 onMounted(() => {
   experienceStore.fetchExperience()
 })
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col item-center p-6">
+  <div class="min-h-screen flex flex-col items-center p-6">
     <div class="mb-6 flex items-center justify-between w-full max-w-5xl">
       <h2 class="text-3xl font-bold tracking-tight">Experience</h2>
       <button
+        @click="openModal"
         class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl shadow hover:bg-hover transition"
       >
         <Plus class="w-5 h-5" />
@@ -24,7 +32,6 @@ onMounted(() => {
     </div>
 
     <div class="w-full max-w-5xl">
-      <ExperienceForm />
       <table class="min-w-full border-collapse">
         <thead class="bg-gray-100 text-gray-600 text-sm">
           <tr>
@@ -61,6 +68,27 @@ onMounted(() => {
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div v-if="showModal">
+      <div
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      >
+        <div
+          class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl w-full max-w-lg"
+        >
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Create Experience</h2>
+            <button
+              @click="closeModal"
+              class="cursor-pointer hover:text-red-600"
+            >
+              <X />
+            </button>
+          </div>
+          <ExperienceForm />
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -46,7 +46,7 @@ const formData = reactive({
       />
     </div>
     <div>
-      <label for="end_date" class="block text-sm font-medium">Start Date</label>
+      <label for="end_date" class="block text-sm font-medium">End Date</label>
       <input
         type="date"
         name="end_date"
@@ -67,6 +67,21 @@ const formData = reactive({
         class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-primary focus:ring-2 focus:ring-primary outline-none"
         placeholder="Describe your role and responsibilities"
       ></textarea>
+    </div>
+
+    <div class="flex justify-end gap-3">
+      <button
+        type="button"
+        class="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-hover focus:outline-none focus:ring-2 focus:ring-primary transition"
+      >
+        Create
+      </button>
     </div>
   </form>
 </template>

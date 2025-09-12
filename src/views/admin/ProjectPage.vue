@@ -132,7 +132,7 @@ onMounted(() => {
         </div>
         <ProjectForm
           :mode="modalMode"
-          :project="selectedProject || null"
+          :project="selectedProject"
           @close="closeModal"
         />
       </div>

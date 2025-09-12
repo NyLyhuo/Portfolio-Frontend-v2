@@ -225,7 +225,7 @@ watch(
       </button>
       <button
         type="submit"
-        class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+        class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-hover focus:outline-none focus:ring-2 focus:ring-primary transition"
       >
         {{ props.mode === 'create' ? 'Create' : 'Update' }} Project
       </button>
