@@ -1,16 +1,37 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
+import { useExperienceStore } from '../stores/experience'
+import { useToast } from 'vue-toast-notification'
 
+const experienceStore = useExperienceStore()
+const toast = useToast()
 const formData = reactive({
   role: '',
   company: '',
   start_date: '',
   end_date: '',
   description: '',
+  isPresent: false,
 })
+
+function handleSubmit() {
+  experienceStore.createExperience(formData)
+  toast.success('Experience created successfully!', {
+    position: 'top-right',
+    duration: 3000,
+  })
+
+  Object.assign(formData, {
+    role: '',
+    company: '',
+    start_date: '',
+    end_date: '',
+    description: '',
+  })
+}
 </script>
 <template>
-  <form class="space-y-6 max-w-lg mx-auto">
+  <form class="space-y-6 max-w-lg mx-auto" @submit.prevent="handleSubmit">
     <div>
       <label for="role" class="block text-sm font-medium">Role</label>
       <input
@@ -40,20 +61,31 @@ const formData = reactive({
       <input
         type="date"
         name="start_date"
-        id="end_date"
+        id="start_date"
         v-model="formData.start_date"
         class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-primary focus:ring-2 focus:ring-primary outline-none"
       />
     </div>
+
     <div>
       <label for="end_date" class="block text-sm font-medium">End Date</label>
       <input
         type="date"
         name="end_date"
         id="end_date"
-        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-primary focus:ring-2 focus:ring-primary outline-none"
+        :disabled="formData.isPresent"
+        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-primary focus:ring-2 focus:ring-primary outline-none disabled:bg-gray-200 disabled:dark:bg-gray-600"
         v-model="formData.end_date"
       />
+      <div class="mt-2 flex items-center gap-2">
+        <input
+          type="checkbox"
+          id="present"
+          v-model="formData.isPresent"
+          class="rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary"
+        />
+        <label for="present">I currently working here</label>
+      </div>
     </div>
     <div>
       <label for="description" class="block text-sm font-medium"
@@ -77,7 +109,7 @@ const formData = reactive({
         Cancel
       </button>
       <button
-        type="button"
+        type="submit"
         class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-hover focus:outline-none focus:ring-2 focus:ring-primary transition"
       >
         Create

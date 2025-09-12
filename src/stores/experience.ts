@@ -22,7 +22,20 @@ export const useExperienceStore = defineStore('experience', {
       try {
         const response = await api.get('/experiences')
         this.experiences = response.data
-        console.log('Fetched experiences:', response.data)
+      } catch (er: any) {
+        this.error = er.message
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async createExperience(formData: any) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await api.post('/experiences', formData)
+        this.experiences.unshift(response.data)
+        //return response.data
       } catch (er: any) {
         this.error = er.message
       } finally {
