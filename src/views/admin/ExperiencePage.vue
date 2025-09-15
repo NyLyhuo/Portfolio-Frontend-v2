@@ -51,7 +51,17 @@ onMounted(() => {
             <td class="px-6 py-4">{{ experience.role }}</td>
             <td class="px-6 py-4">{{ experience.company }}</td>
             <td class="px-6 py-4">{{ experience.start_date }}</td>
-            <td class="px-6 py-4">{{ experience.end_date }}</td>
+            <td class="px-6 py-4">
+              {{
+                experience.end_date
+                  ? new Date(experience.end_date).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    })
+                  : 'Present'
+              }}
+            </td>
             <td class="px-6 py-4">{{ experience.description }}</td>
             <td class="px-6 py-4 flex gap-2">
               <button

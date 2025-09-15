@@ -10,8 +10,8 @@ const formData = reactive({
   company: '',
   start_date: '',
   end_date: '',
+  is_present: false,
   description: '',
-  isPresent: false,
 })
 
 function handleSubmit() {
@@ -26,6 +26,7 @@ function handleSubmit() {
     company: '',
     start_date: '',
     end_date: '',
+    is_present: false,
     description: '',
   })
 }
@@ -73,7 +74,7 @@ function handleSubmit() {
         type="date"
         name="end_date"
         id="end_date"
-        :disabled="formData.isPresent"
+        :disabled="formData.is_present"
         class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-primary focus:ring-2 focus:ring-primary outline-none disabled:bg-gray-200 disabled:dark:bg-gray-600"
         v-model="formData.end_date"
       />
@@ -81,7 +82,7 @@ function handleSubmit() {
         <input
           type="checkbox"
           id="present"
-          v-model="formData.isPresent"
+          v-model="formData.is_present"
           class="rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary"
         />
         <label for="present">I currently working here</label>

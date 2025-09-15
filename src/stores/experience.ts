@@ -7,6 +7,7 @@ interface Experience {
   company: string
   start_date: string
   end_date: string | null
+  is_present: boolean
   description: string
 }
 export const useExperienceStore = defineStore('experience', {
@@ -35,7 +36,6 @@ export const useExperienceStore = defineStore('experience', {
       try {
         const response = await api.post('/experiences', formData)
         this.experiences.unshift(response.data)
-        //return response.data
       } catch (er: any) {
         this.error = er.message
       } finally {
