@@ -96,7 +96,6 @@ onMounted(() => {
             >
           </div>
 
-          <!-- Actions -->
           <div class="flex justify-end gap-2">
             <button
               @click="openEditModal(project)"

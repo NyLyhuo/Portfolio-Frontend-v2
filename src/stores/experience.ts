@@ -43,6 +43,23 @@ export const useExperienceStore = defineStore('experience', {
       }
     },
 
+    async updateExperience(id: number, formData: any) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await api.put(`/experiences/${id}`, formData)
+        const index = this.experiences.findIndex((exp) => exp.id === id)
+        if (index !== -1) {
+          this.experiences[index] = response.data
+        }
+        return response.data
+      } catch (er: any) {
+        this.error = er.message
+      } finally {
+        this.loading = false
+      }
+    },
+
     async deleteExperience(id: number) {
       this.loading = true
       this.error = null

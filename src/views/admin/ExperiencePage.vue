@@ -6,10 +6,21 @@ import ExperienceForm from '../../components/ExperienceForm.vue'
 
 const experienceStore = useExperienceStore()
 const showModal = ref(false)
+const modalMode = ref<'Create' | 'Edit'>('Create')
+const selectedExperience = ref<any | null>(null)
 
-function openModal() {
+function openCreateModal() {
+  modalMode.value = 'Create'
+  selectedExperience.value = null
   showModal.value = true
 }
+
+function openEditModal(experience: any) {
+  modalMode.value = 'Edit'
+  selectedExperience.value = experience
+  showModal.value = true
+}
+
 function closeModal() {
   showModal.value = false
 }
@@ -23,7 +34,7 @@ onMounted(() => {
     <div class="mb-6 flex items-center justify-between w-full max-w-5xl">
       <h2 class="text-3xl font-bold tracking-tight">Experience</h2>
       <button
-        @click="openModal"
+        @click="openCreateModal"
         class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl shadow hover:bg-hover transition"
       >
         <Plus class="w-5 h-5" />
@@ -66,6 +77,7 @@ onMounted(() => {
             <td class="px-6 py-4 flex gap-2">
               <button
                 class="px-4 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
+                @click="openEditModal(experience)"
               >
                 Edit
               </button>
@@ -89,7 +101,11 @@ onMounted(() => {
           class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl w-full max-w-lg"
         >
           <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold">Create Experience</h2>
+            <h2 class="text-xl font-bold">
+              {{
+                modalMode == 'Create' ? 'Create Experience' : 'Edit Experience'
+              }}
+            </h2>
             <button
               @click="closeModal"
               class="cursor-pointer hover:text-red-600"
@@ -97,7 +113,11 @@ onMounted(() => {
               <X />
             </button>
           </div>
-          <ExperienceForm />
+          <ExperienceForm
+            :mode="modalMode"
+            :experience="selectedExperience"
+            @close="closeModal"
+          />
         </div>
       </div>
     </div>

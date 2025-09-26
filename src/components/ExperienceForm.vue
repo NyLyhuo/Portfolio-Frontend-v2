@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, watchEffect } from 'vue'
 import { useExperienceStore } from '../stores/experience'
 import { useToast } from 'vue-toast-notification'
 
 const experienceStore = useExperienceStore()
 const toast = useToast()
+
+const props = defineProps<{
+  mode: 'Create' | 'Edit'
+  experience?: any
+}>()
+const emit = defineEmits(['close'])
+
 const formData = reactive({
   role: '',
   company: '',
@@ -14,21 +21,39 @@ const formData = reactive({
   description: '',
 })
 
+watchEffect(() => {
+  if (props.mode === 'Edit' && props.experience) {
+    formData.role = props.experience.role
+    formData.company = props.experience.company
+    formData.start_date = props.experience.start_date
+    formData.end_date = props.experience.end_date || ''
+    formData.is_present = props.experience.end_date === null
+    formData.description = props.experience.description
+  }
+})
 function handleSubmit() {
-  experienceStore.createExperience(formData)
-  toast.success('Experience created successfully!', {
-    position: 'top-right',
-    duration: 3000,
-  })
+  if (props.mode === 'Create') {
+    experienceStore.createExperience(formData)
+    toast.success('Experience created successfully!', {
+      position: 'top-right',
+      duration: 3000,
+    })
 
-  Object.assign(formData, {
-    role: '',
-    company: '',
-    start_date: '',
-    end_date: '',
-    is_present: false,
-    description: '',
-  })
+    Object.assign(formData, {
+      role: '',
+      company: '',
+      start_date: '',
+      end_date: '',
+      is_present: false,
+      description: '',
+    })
+  } else {
+    experienceStore.updateExperience(props.experience.id, formData)
+    toast.success('Experience updated successfully!', {
+      position: 'top-right',
+      duration: 3000,
+    })
+  }
 }
 </script>
 <template>
@@ -105,6 +130,7 @@ function handleSubmit() {
     <div class="flex justify-end gap-3">
       <button
         type="button"
+        @click="$emit('close')"
         class="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
       >
         Cancel
@@ -113,7 +139,7 @@ function handleSubmit() {
         type="submit"
         class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-hover focus:outline-none focus:ring-2 focus:ring-primary transition"
       >
-        Create
+        {{ props.mode === 'Create' ? 'Create' : 'Update' }}
       </button>
     </div>
   </form>
