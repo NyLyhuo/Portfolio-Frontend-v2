@@ -42,5 +42,18 @@ export const useExperienceStore = defineStore('experience', {
         this.loading = false
       }
     },
+
+    async deleteExperience(id: number) {
+      this.loading = true
+      this.error = null
+      try {
+        await api.delete(`/experiences/${id}`)
+        this.experiences = this.experiences.filter((exp) => exp.id !== id)
+      } catch (er: any) {
+        this.error = er.message
+      } finally {
+        this.loading = false
+      }
+    },
   },
 })

@@ -71,6 +71,7 @@ onMounted(() => {
               </button>
               <button
                 class="px-4 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600"
+                @click="experienceStore.deleteExperience(experience.id)"
               >
                 Delete
               </button>
