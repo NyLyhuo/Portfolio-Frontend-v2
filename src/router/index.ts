@@ -22,6 +22,11 @@ const routes = [
         name: 'Experience',
         component: () => import('../views/admin/ExperiencePage.vue'),
       },
+      {
+        path: 'education',
+        name: 'Education',
+        component: () => import('../views/admin/EducationPage.vue'),
+      },
     ],
     component: () => import('../views/admin/DashboardPage.vue'),
     meta: { requiresAuth: true },
