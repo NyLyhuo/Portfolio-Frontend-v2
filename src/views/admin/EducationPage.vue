@@ -4,6 +4,13 @@ import { useEducationStore } from '../../stores/education'
 
 const educationStore = useEducationStore()
 
+function formatDate(date) {
+  return new Date(date).toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  })
+}
 onMounted(() => {
   educationStore.fetchEducation()
 })
@@ -21,14 +28,25 @@ onMounted(() => {
     </div>
 
     <div class="w-full max-w-5xl">
-      <table class="min-w-full border-collapse">
+      <table class="min-w-full border-collapse divide-y divide-gray-200">
         <thead class="bg-gray100 text-gray-600 text-sm">
-          <tr>
-            <th class="px-6 py-3 text-left font-semibold">School name</th>
-            <th class="px-6 py-3 text-left font-semibold">Degree</th>
-            <th class="px-6 py-3 text-left font-semibold">major</th>
-            <th class="px-6 py-3 text-left font-semibold">Start Date</th>
-            <th class="px-6 py-3 text-left font-semibold">End Date</th>
+          <tr class="hover:bg-gray50 transition">
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              School name
+            </th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              Degree
+            </th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              major
+            </th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              Start Date
+            </th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              End Date
+            </th>
+            <th class="px-6 py-3 text-left font-semibold">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -36,11 +54,31 @@ onMounted(() => {
             v-for="education in educationStore.educations"
             :key="education.id"
           >
-            <td class="px-6 py-4">{{ education.school_name }}</td>
-            <td class="px-6 py-4">{{ education.degree }}</td>
-            <td class="px-6 py-4">{{ education.major }}</td>
-            <td class="px-6 py-4">{{ education.start_date }}</td>
-            <td class="px-6 py-4">{{ education.end_date }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ education.school_name }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ education.degree }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ education.major }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ formatDate(education.start_date) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ formatDate(education.end_date) }}
+            </td>
+            <td class="px-6 py-4 flex item-center gap-3">
+              <button
+                class="px-3 py-1.5 text-sm rounded-lg bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-600 active:scale-95 transition"
+                @click="null"
+              >
+                Edit
+              </button>
+              <button
+                class="px-3 py-1.5 rounded-lg bg-red-500 text-white hover:bg-red-600 active:bg-red-600 active:scale-95 transition"
+                @click="null"
+              >
+                Delete
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
