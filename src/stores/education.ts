@@ -30,5 +30,18 @@ export const useEducationStore = defineStore('education', {
         this.loading = false
       }
     },
+
+    async createEducation(formData: any) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await api.post('/education', formData)
+        this.educations.unshift(response.data)
+      } catch (er: any) {
+        this.error = er.message
+      } finally {
+        this.loading = false
+      }
+    },
   },
 })

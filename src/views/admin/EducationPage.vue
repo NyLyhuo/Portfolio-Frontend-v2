@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useEducationStore } from '../../stores/education'
+import EducationForm from '../../components/EducationForm.vue'
 
 const educationStore = useEducationStore()
+const showModal = ref(false)
+
+function openCreateModal() {
+  showModal.value = true
+}
 
 function formatDate(date) {
   return new Date(date).toLocaleDateString('en-GB', {
@@ -21,6 +27,7 @@ onMounted(() => {
     <div class="flex items-center justify-between mb-6 w-full max-w-5xl">
       <h2 class="text-3xl font-bold tracking-tight">Education</h2>
       <button
+        @click="openCreateModal"
         class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl shadow hover:bg-hover transition"
       >
         Add Education
@@ -49,16 +56,16 @@ onMounted(() => {
             <th class="px-6 py-3 text-left font-semibold">Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y text-sm">
           <tr
             v-for="education in educationStore.educations"
             :key="education.id"
           >
-            <td class="px-6 py-4 whitespace-nowrap">
+            <td class="px-6 py-4">
               {{ education.school_name }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ education.degree }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ education.major }}</td>
+            <td class="px-6 py-4">{{ education.degree }}</td>
+            <td class="px-6 py-4">{{ education.major }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
               {{ formatDate(education.start_date) }}
             </td>
@@ -82,6 +89,22 @@ onMounted(() => {
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div v-if="showModal">
+      <div
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      >
+        <div
+          class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl w-full max-w-lg"
+        >
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Add New Education</h2>
+            <button>X</button>
+          </div>
+          <EducationForm />
+        </div>
+      </div>
     </div>
   </div>
 </template>
